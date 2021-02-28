@@ -1,64 +1,99 @@
-import React,{useState} from "react";
-import {calculateWinner} from "../helper";
-import Board from "./Board";
-import "../index.css";
+import React, { Component } from 'react'
+import Board from './Board';
 
-const Game = ()=>{
-     const[history , setHistory] = useState([Array(9).fill(null)]);
-     console.log('history', history);
-     const[stepNumber,setStepNumber] = useState(0);
-    const[xIsNext , setXisNext] = useState(true);
-
-    const winner = calculateWinner(history[stepNumber]);
-
-    const xo = xIsNext ? "X" : "O";
-
-    const handleClick = (i) =>{
-          const historyPoint = history.slice(0, stepNumber+1);
-          const current = historyPoint[stepNumber];
-          const squares = [...current];
-
-    //     // return won or occupied
-
-        if(winner || squares[i]);
-
-    //     // select squares
-
-        squares[i] = xo;
-         setHistory([...historyPoint,squares]);
-         setStepNumber(historyPoint.length);
-        setXisNext(!xIsNext)
-     };
-
-    const jumpTo =  (step) =>{
-        setStepNumber(step);
-        setXisNext(step % 2 === 0);
-    };
-
-    const renderMoves = () =>{
-        history.map((_step,move)=>{
-            const destination = move ? `Go to Move #${move}` : "Go to Start ";
-            return(
-                <li key={move}>
-                    <button className="game" onClick={ ()=> jumpTo(move)}> {destination} </button>
-                </li>
-            );
-        });
+export default class Game extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            xIsNext: true,
+            stepNumber: 0,
+            history: [
+                { squares: Array(9).fill(null) }
+            ]
+        }
     }
-    
-    return (
-        <>
-            <h2>React Tic tac toe</h2>
-             <Board squares={history[stepNumber]} onclick={handleClick} />
-            <div className="info-wrapper">
-                <div>
-                    <h3>History</h3>
-                    {renderMoves()}
-                </div>
-                <h3>{winner ? "Winner :" + winner : "Next Player : " + xo }</h3>
-            </div> 
-        </>
-    );
-};
+    jumpTo(step){
+        this.setState({
+            stepNumber: step,
+            xIsNext: (step%2)===0
+        })
+    }
 
-export default Game;
+    handleClick(i) {
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const current = history[history.length - 1];
+        const squares = current.squares.slice();
+        const winner = calculateWinner(squares);
+        if (winner || squares[i]) {
+            return;
+        }
+        squares[i] = this.state.xIsNext ? 'X' : 'O';
+        this.setState({
+            history: history.concat({
+                squares: squares
+            }),
+            xIsNext: !this.state.xIsNext,
+            stepNumber: history.length
+        });
+
+    }
+
+    render() {
+        const history = this.state.history;
+        const current = history[this.state.stepNumber];
+        const winner = calculateWinner(current.squares);
+        const moves = history.map((step, move) => {
+            const desc = move ? 'Go to #' + move : 'Start the Game';
+            return (
+                <li key={move}>
+                    <button onClick={() => { this.jumpTo(move) }}>
+                        {desc}
+                    </button>
+                </li>
+            )
+        });
+        let status;
+        if (winner) {
+            status = 'Winner is ' + winner;
+        } else {
+            status = 'Next Player is ' + (this.state.xIsNext ? 'X' : 'O');
+        }
+
+
+        return (
+            <div className="game">
+                <div className="game-board">
+                    <Board onClick={(i) => this.handleClick(i)}
+                        squares={current.squares} />
+                </div>
+                <div className="game-info">
+                    <div>{status}</div>
+                    <ul>{moves}</ul>
+                </div>
+
+            </div>
+        )
+    }
+}
+
+function calculateWinner(squares) {
+    const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+
+    for (let i = 0; i < lines.length; i++) {
+        const [a, b, c] = lines[i];
+        if (squares[a] && squares[a] === squares[b] && squares[b] === squares[c]) {
+            return squares[a];
+        }
+    }
+
+    return null;
+}

@@ -1,14 +1,9 @@
-import React from "react";
-import "./Board"
+import React from 'react'
 
-const Square = ({value, onclick}) =>{
-
-    const style = value ? `squares ${value} ` : ` squares `;
+export default function Square(props) {
     return (
-        <button className={style}  onClick={onclick}>
-            {value}
+        <button className="square" onClick={props.onClick}>
+            {props.value}
         </button>
     )
 }
-
-export default Square;

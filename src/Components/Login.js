@@ -81,28 +81,6 @@ class Login extends React.Component {
     {/* <ListGroup.Item>token: {localStorage.getItem("Token")}</ListGroup.Item> */}
   </ListGroup>
 </Card>
-            {/* <ListGroup className="mx-auto">
-                <ListGroup.Item> id: {this.state.respUser.id} </ListGroup.Item>
-                <ListGroup.Item>national code: {this.state.respUser.national_code}</ListGroup.Item>
-                <ListGroup.Item>first name: {this.state.respUser.first_name}</ListGroup.Item>
-                <ListGroup.Item>last name : {this.state.respUser.last_name}</ListGroup.Item>
-                <ListGroup.Item>mobile: {this.state.respUser.mobile}</ListGroup.Item>
-                <ListGroup.Item>token: {localStorage.getItem("Token")}</ListGroup.Item>
-            </ListGroup> */}
-          
-          {/* <ul>
-            <li> id: {this.state.respUser.id} </li>
-            <li> national code: {this.state.respUser.national_code} </li>
-            <li> first name: {this.state.respUser.first_name} </li>
-            <li> last name : {this.state.respUser.last_name} </li>
-            <li> mobile: {this.state.respUser.mobile} </li>
-          </ul> */}
-  
-          {/* {this.state.respUser.id} <br/><br/>
-          {this.state.respUser.national_code} <br/><br/>
-          {this.state.respUser.first_name} <br/><br/>
-          {this.state.respUser.last_name} <br/><br/>
-          {this.state.respUser.mobile} <br/><br/> */}
         </div>
       </div>
       )
